@@ -18,7 +18,7 @@ NewsApp is a Android application that provides users with the latest news articl
 
 1. Clone the repository:
 
-`git clone https://github.com/your-username/NewsApp.git`
+`git clone https://github.com/Italord0/NewsApp.git`
 
 2. Open the project in Android Studio.
 

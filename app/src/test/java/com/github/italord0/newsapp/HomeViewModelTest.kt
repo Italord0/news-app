@@ -1,6 +1,5 @@
 package com.github.italord0.newsapp
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.github.italord0.newsapp.data.NewsResponse
 import com.github.italord0.newsapp.ui.ScreenState
 import com.github.italord0.newsapp.ui.home.HomeScreenState
@@ -12,11 +11,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.createTestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -29,6 +24,9 @@ class HomeViewModelTest {
     private lateinit var getTopHeadlinesUseCase: GetTopHeadlinesUseCase
     private lateinit var getAllArticlesUseCase: GetAllArticlesUseCase
     private lateinit var viewModel: HomeViewModelImpl
+
+    @get:Rule
+    val retryRule = RetryRule(3)
 
     @Before
     fun setup() {

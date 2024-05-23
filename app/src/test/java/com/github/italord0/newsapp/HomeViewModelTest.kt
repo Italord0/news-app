@@ -48,7 +48,7 @@ class HomeViewModelTest {
 
         // When
         viewModel.fetchArticles()
-        advanceTimeBy(200)
+        advanceTimeBy(1000)
 
         // Then
         coVerify { getTopHeadlinesUseCase.invoke() }
@@ -85,7 +85,7 @@ class HomeViewModelTest {
             HomeScreenState(ScreenState.LOADING, articles = listOf()),
             viewModel.homeScreenState.value
         )
-        advanceTimeBy(200)
+        advanceTimeBy(1000)
 
         // Then
         coVerify { getAllArticlesUseCase.invoke() }

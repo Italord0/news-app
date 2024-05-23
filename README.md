@@ -2,6 +2,8 @@
 
 NewsApp is a Android application that provides users with the latest news articles from various sources using the NewsAPI.
 
+<img width=300 src="https://github.com/Italord0/news-app/assets/32901063/5db0f173-821b-4a13-b877-cac4b1c56efe" >
+
 ## Features
 
 - Browse top headlines and articles from multiple sources.

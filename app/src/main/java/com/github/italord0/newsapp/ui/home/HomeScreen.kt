@@ -63,7 +63,14 @@ fun HomeScreen(viewModel: HomeViewModel = getViewModel(), navController: NavCont
 
             when (state.screenState) {
                 LOADING -> {
-                    CircularProgressIndicator()
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            color = Color.White
+                        )
+                    }
                 }
 
                 SUCCESS -> {

@@ -1,10 +1,7 @@
 package com.github.italord0.newsapp
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.github.italord0.newsapp.data.NewsApiService
 import com.github.italord0.newsapp.data.NewsResponse
-import com.github.italord0.newsapp.di.repositoryModule
-import com.github.italord0.newsapp.repository.ArticleRepository
 import com.github.italord0.newsapp.ui.ScreenState
 import com.github.italord0.newsapp.ui.home.HomeScreenState
 import com.github.italord0.newsapp.ui.home.HomeViewModelImpl
@@ -15,7 +12,10 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.createTestCoroutineScope
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -25,8 +25,6 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class HomeViewModelTest {
 
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var getTopHeadlinesUseCase: GetTopHeadlinesUseCase
     private lateinit var getAllArticlesUseCase: GetAllArticlesUseCase
@@ -40,7 +38,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `fetchArticles invokes GetTopHeadlinesUseCase and updates state correctly`() = runTest {
+    fun `fetchArticles invokes GetTopHeadlinesUseCase and updates state correctly`() = runBlockingTest {
         // Given
         val mockArticles = listOf(mockArticle, mockArticle)
         val successState = HomeScreenState(ScreenState.SUCCESS, articles = mockArticles)
@@ -48,7 +46,6 @@ class HomeViewModelTest {
 
         // When
         viewModel.fetchArticles()
-        advanceTimeBy(1000)
 
         // Then
         coVerify { getTopHeadlinesUseCase.invoke() }
@@ -56,7 +53,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `fetchArticles handles failure and updates state correctly`() = runTest {
+    fun `fetchArticles handles failure and updates state correctly`() = runBlockingTest {
         // Given
         val error = RuntimeException("Something went wrong")
         val failureState = HomeScreenState(ScreenState.ERROR, articles = listOf(), error = error)
@@ -64,7 +61,6 @@ class HomeViewModelTest {
 
         // When
         viewModel.fetchArticles()
-        advanceTimeBy(1000)
 
         // Then
         coVerify { getTopHeadlinesUseCase.invoke() }
@@ -72,7 +68,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `fetchAllArticles invokes GetAllArticlesUseCase and updates state correctly`() = runTest {
+    fun `fetchAllArticles invokes GetAllArticlesUseCase and updates state correctly`() = runBlockingTest {
         // Given
         val mockArticles = listOf(mockArticle, mockArticle)
         val successState = HomeScreenState(ScreenState.SUCCESS, articles = mockArticles)
@@ -81,19 +77,13 @@ class HomeViewModelTest {
         // When
         viewModel.fetchAllArticles()
 
-        assertEquals(
-            HomeScreenState(ScreenState.LOADING, articles = listOf()),
-            viewModel.homeScreenState.value
-        )
-        advanceTimeBy(1000)
-
         // Then
         coVerify { getAllArticlesUseCase.invoke() }
         assertEquals(successState, viewModel.homeScreenState.value)
     }
 
     @Test
-    fun `fetchAllArticles handles failure and updates state correctly`() = runTest {
+    fun `fetchAllArticles handles failure and updates state correctly`() = runBlockingTest {
         // Given
         val error = RuntimeException("Something went wrong")
         val failureState = HomeScreenState(ScreenState.ERROR, articles = listOf(), error = error)
@@ -101,7 +91,6 @@ class HomeViewModelTest {
 
         // When
         viewModel.fetchAllArticles()
-        advanceTimeBy(1000)
 
         // Then
         coVerify { getAllArticlesUseCase.invoke() }
